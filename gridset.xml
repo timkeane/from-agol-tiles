@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CacheInfo xsi:type='typens:CacheInfo' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.1.0'>
+  <TileCacheInfo xsi:type='typens:TileCacheInfo'>
+    <SpatialReference xsi:type='typens:ProjectedCoordinateSystem'>
+      <WKT>PROJCS[&quot;NAD_1983_StatePlane_New_York_Long_Island_FIPS_3104_Feet&quot;,GEOGCS[&quot;GCS_North_American_1983&quot;,DATUM[&quot;D_North_American_1983&quot;,SPHEROID[&quot;GRS_1980&quot;,6378137.0,298.257222101]],PRIMEM[&quot;Greenwich&quot;,0.0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Lambert_Conformal_Conic&quot;],PARAMETER[&quot;False_Easting&quot;,984250.0],PARAMETER[&quot;False_Northing&quot;,0.0],PARAMETER[&quot;Central_Meridian&quot;,-74.0],PARAMETER[&quot;Standard_Parallel_1&quot;,40.66666666666666],PARAMETER[&quot;Standard_Parallel_2&quot;,41.03333333333333],PARAMETER[&quot;Latitude_Of_Origin&quot;,40.16666666666666],UNIT[&quot;Foot_US&quot;,0.3048006096012192],AUTHORITY[&quot;EPSG&quot;,2263]]</WKT>
+      <XOrigin>-120039300</XOrigin>
+      <YOrigin>-96540300</YOrigin>
+      <XYScale>3048.0060960121928</XYScale>
+      <ZOrigin>-100000</ZOrigin>
+      <ZScale>10000</ZScale>
+      <MOrigin>-100000</MOrigin>
+      <MScale>10000</MScale>
+      <XYTolerance>0.0032808333333333331</XYTolerance>
+      <ZTolerance>0.001</ZTolerance>
+      <MTolerance>0.001</MTolerance>
+      <HighPrecision>true</HighPrecision>
+      <WKID>102718</WKID>
+      <LatestWKID>2263</LatestWKID>
+    </SpatialReference>
+    <TileOrigin xsi:type='typens:PointN'>
+      <X>-120038910.56151593</X>
+      <Y>113155737.97806966</Y>
+    </TileOrigin>
+    <TileCols>512</TileCols>
+    <TileRows>512</TileRows>
+    <DPI>96</DPI>
+    <LODInfos xsi:type='typens:ArrayOfLODInfo'>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>0</LevelID>
+        <Scale>544605311.73744512</Scale>
+        <Resolution>472746.72094342159</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>1</LevelID>
+        <Scale>272302655.86872256</Scale>
+        <Resolution>236373.3604717108</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>2</LevelID>
+        <Scale>136151327.93436128</Scale>
+        <Resolution>118186.6802358554</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>3</LevelID>
+        <Scale>68075663.96718064</Scale>
+        <Resolution>59093.340117927699</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>4</LevelID>
+        <Scale>34037831.98359032</Scale>
+        <Resolution>29546.670058963849</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>5</LevelID>
+        <Scale>17018915.99179516</Scale>
+        <Resolution>14773.335029481925</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>6</LevelID>
+        <Scale>8509457.9958975799</Scale>
+        <Resolution>7386.6675147409624</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>7</LevelID>
+        <Scale>4254728.99794879</Scale>
+        <Resolution>3693.3337573704812</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>8</LevelID>
+        <Scale>2127364.498974395</Scale>
+        <Resolution>1846.6668786852406</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>9</LevelID>
+        <Scale>1063682.2494871975</Scale>
+        <Resolution>923.3334393426203</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>10</LevelID>
+        <Scale>531841.12474359875</Scale>
+        <Resolution>461.66671967131015</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>11</LevelID>
+        <Scale>265920.56237179937</Scale>
+        <Resolution>230.83335983565507</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>12</LevelID>
+        <Scale>132960.28118589969</Scale>
+        <Resolution>115.41667991782754</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>13</LevelID>
+        <Scale>66480.140592949843</Scale>
+        <Resolution>57.708339958913768</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>14</LevelID>
+        <Scale>33240.070296474922</Scale>
+        <Resolution>28.854169979456884</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>15</LevelID>
+        <Scale>16620.035148237461</Scale>
+        <Resolution>14.427084989728442</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>16</LevelID>
+        <Scale>8310.0175741187304</Scale>
+        <Resolution>7.2135424948642211</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>17</LevelID>
+        <Scale>4155.0087870593652</Scale>
+        <Resolution>3.6067712474321105</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>18</LevelID>
+        <Scale>2077.5043935296826</Scale>
+        <Resolution>1.8033856237160553</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>19</LevelID>
+        <Scale>1038.7521967648413</Scale>
+        <Resolution>0.90169281185802763</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>20</LevelID>
+        <Scale>519.37609838242065</Scale>
+        <Resolution>0.45084640592901382</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>21</LevelID>
+        <Scale>259.68804919121033</Scale>
+        <Resolution>0.22542320296450691</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>22</LevelID>
+        <Scale>129.84402459560516</Scale>
+        <Resolution>0.11271160148225345</Resolution>
+      </LODInfo>
+      <LODInfo xsi:type='typens:LODInfo'>
+        <LevelID>23</LevelID>
+        <Scale>64.922012297802581</Scale>
+        <Resolution>0.056355800741126727</Resolution>
+      </LODInfo>
+    </LODInfos>
+    <PreciseDPI>96</PreciseDPI>
+  </TileCacheInfo>
+  <TileImageInfo xsi:type='typens:TileImageInfo'>
+    <CacheTileFormat>PNG</CacheTileFormat>
+    <CompressionQuality>0</CompressionQuality>
+    <Antialiasing>false</Antialiasing>
+    <BandCount>1</BandCount>
+    <LERCError>0</LERCError>
+  </TileImageInfo>
+  <CacheStorageInfo xsi:type='typens:CacheStorageInfo'>
+    <StorageFormat>esriMapCacheStorageModeCompact</StorageFormat>
+    <PacketSize>128</PacketSize>
+  </CacheStorageInfo>
+</CacheInfo>
