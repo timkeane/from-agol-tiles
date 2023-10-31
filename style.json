@@ -8,7 +8,7 @@
       "attribution": "SOURCE: NYC Open Data | Esri",
       "maxzoom": 16,
       "scheme": "xyz",
-      "tiles": ["https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/tile/{z}/{y}/{x}.pbf"]
+      "tiles": ["https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/tile/{z}/{-y}/{x}.pbf"]
     }
   },
   "layers": [
