@@ -26,7 +26,6 @@ proj4.defs([
 register(proj4);
 
 const url = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/resources/styles/root.json';
-// try EPSG:2263 custom grid etc...
 
 const center = [994936.9688, 149775.5801];
 
@@ -36,8 +35,6 @@ const extent = [
   1629359.451970779,
   502811.7364480441
 ];
-
-console.warn(getCenter(extent));
 
 const resolutions = [
   472746.7209434216,
@@ -114,9 +111,3 @@ const map = new Map({
   }),
   layers: [layer, building]
 });
-
-window.tileGrid = tileGrid;
-window.layer = layer;
-window.map = map;
-window.view = map.getView();
-window.center = center;
