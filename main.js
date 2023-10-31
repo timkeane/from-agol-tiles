@@ -28,7 +28,7 @@ register(proj4);
 const url = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/resources/styles/root.json';
 // try EPSG:2263 custom grid etc...
 
-const center = [984070.964366585, 110165.13249781117];
+const center = [994936.9688, 149775.5801];
 
 const extent = [
   338782.476762391,
@@ -76,18 +76,15 @@ const tileGrid = new TileGrid({
 const layer = new VectorTileLayer({
   declutter: true,
   source: new VectorTileSource({
-    // format: new MVT(),
+    format: new MVT(),
     projection: 'EPSG:2263',
     tileGrid,
-    // urlFunction: function(tileCoord) {
-    //   return `https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/tile/${tileCoord[0]}/${(-coordinate[2] - 1)}/${tileCoord[1]}.pbf`;
-    // }
+    url: 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer/tile/{z}/{y}/{x}.pbf'
   })
 });
 
 applyStyle(layer, url, '', {resolutions, updateSource: false});
 applyBackground(layer, url);
-
 
 const building = new Layer({
   source: new Source({
@@ -106,38 +103,6 @@ const building = new Layer({
   })
 });
 
-const geoms = new Layer({
-  source: new Source({
-    projection: 'EPSG:2263',
-    features: [
-      new Feature({
-        geometry: new Point([984070.964366585, 110165.13249781117])
-      }),
-      // new Feature({
-      //   geometry: new Point([-120038910.56151593, 113155737.97806966])
-      // }),
-      // new Feature({
-      //   geometry: fromExtent(adjusted)
-      // })
-    ]
-  })
-});
-
-const bounds = new Feature({
-  geometry: fromExtent(extent)
-});
-
-bounds.setStyle(
-  new Style({
-    stroke: new Stroke({
-      width: 4,
-      color: 'red'
-    })
-  })
-);
-geoms.getSource().addFeature(bounds);
-
-
 const map = new Map({
   target: 'map2',
   view: new View({
@@ -145,81 +110,13 @@ const map = new Map({
     minResolution: resolutions[resolutions.length - 1],
     projection: 'EPSG:2263',
     center,
-    zoom: 4
+    zoom: 20
   }),
-  // layers: [layer, building, geoms]
-  layers: [layer, geoms]
+  layers: [layer, building]
 });
 
 window.tileGrid = tileGrid;
 window.layer = layer;
 window.map = map;
 window.view = map.getView();
-window.features = geoms.getSource().getFeatures();
 window.center = center;
-
-
-const src = geoms.getSource();
-
-map.on('click', e => {
-  src.getFeaturesAtCoordinate(e.coordinate).forEach(f => {
-      console.warn(f.getProperties());
-  })
-});
-
-const origin = tileGrid.getOrigin();
-const tileSize = 512;
-for (let z = 4; z < 5; z++) {
-  let count = 0;
-  const rows = 2 ** z; 
-  const cols = rows;
-  console.info(z);
-  console.info(cols,rows);
-  const res = resolutions[z];
-  const size = tileSize * res;
-  for (let x = 0; x < cols; x++) {
-    const minX = origin[0] + x * size;
-    const maxX = minX + size;
-    for (let y = 0; y < rows; y++) {
-      const minY = origin[1] - (y + 1) * size;
-      const maxY = minY + size;
-      const ex = [minX, minY, maxX, maxY];
-      count++;
-      console.warn(z,x,y,ex);
-    const f = new Feature({
-      geometry: fromExtent(ex),
-      z, x, y
-    });
-    f.setStyle(
-      new Style({
-        stroke: new Stroke({
-          width: 1,
-          color: 'pink'
-        })
-      })
-    );
-    src.addFeature(f);
-    }
-  }
-  // console.error(count);
-}
-
-//     // console.warn(tileCoord, ex);
-//     const f = new Feature({
-//       geometry: fromExtent(ex),
-//       z: tileCoord[0],
-//       x: tileCoord[1],
-//       y: tileCoord[2]
-//     });
-//     f.setStyle(
-//       new Style({
-//         stroke: new Stroke({
-//           width: 1,
-//           color: 'pink'
-//         })
-//       })
-//     );
-//     src.addFeature(f);
-//   });
-//   console.warn(z,i);
-// }
