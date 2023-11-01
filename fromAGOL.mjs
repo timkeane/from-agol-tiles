@@ -78,7 +78,7 @@ export function mvtBasemap(serviceUrl) {
         }),
         layers: [layer]
       });
-      resolve(map);    
+      resolve(map);
     }).catch(err => {
       console.error(`Failed to create Map from service ${serviceUrl}`, err);
     });
