@@ -1,21 +1,15 @@
-import olms from 'ol-mapbox-style';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileGrid from 'ol/tilegrid/TileGrid';
-import {createXYZ} from 'ol/tilegrid';
 import VectorTileSource from 'ol/source/VectorTile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import Source from 'ol/source/Vector';
 import Layer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import MVT from 'ol/format/MVT';
-import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
-import Point from 'ol/geom/Point';
-import {fromExtent} from 'ol/geom/Polygon';
-import {getCenter} from 'ol/extent';
 import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 
