@@ -26,7 +26,7 @@ export function tileGridInfo(serviceUrl) {
         resolve({tileGrid, projection});
       });
     }).catch(err => {
-      console.error(`Failed to create TileGid from service ${serviceUrl}`, err)
+      console.error(`Failed to create TileGid from service ${serviceUrl}`, err);
     });
   });
 }
@@ -53,7 +53,7 @@ export function mvtLayer(serviceUrl) {
       applyBackground(layer, styleUrl);
       resolve(layer);
     }).catch(err => {
-      console.error(`Failed to create Layer from service ${serviceUrl}`, err)
+      console.error(`Failed to create Layer from service ${serviceUrl}`, err);
     });
   });
 }
