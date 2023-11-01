@@ -3,8 +3,8 @@ import Layer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
-import proj4 from 'proj4';
 import {mvtBasemap} from './fromAGOL.mjs';
+import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 
 proj4.defs([
