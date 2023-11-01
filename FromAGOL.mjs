@@ -7,6 +7,7 @@ import MVT from 'ol/format/MVT';
 import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 
+// TODO cleanup serviceUrl trailing slash
 export function tileGridInfo(serviceUrl) {
   return new Promise((resolve, reject) => {
     fetch(serviceUrl).then(response => {

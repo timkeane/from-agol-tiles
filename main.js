@@ -13,7 +13,7 @@ proj4.defs([
 ]);
 register(proj4);
 
-const serviceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_Test_2263/VectorTileServer';
+const serviceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer';
 
 mvtBasemap(serviceUrl).then(map => {
   const source = new Source({
@@ -32,5 +32,5 @@ mvtBasemap(serviceUrl).then(map => {
   });
   map.addLayer(new Layer({source, style}));
   map.getView().setCenter([994955, 149780]);
-  map.getView().setZoom(20);
+  map.getView().setZoom(19);
 });
