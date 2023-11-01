@@ -41,7 +41,7 @@ mvtLayer(serviceUrl).then(layer => {
   const projection = source.getProjection();
 
   const map = new Map({
-    target: 'map2',
+    target: 'map',
     view: new View({
       projection,
       maxResolution: resolutions[0],
