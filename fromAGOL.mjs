@@ -80,7 +80,7 @@ export function mvtBasemap(serviceUrl) {
       });
       resolve(map);    
     }).catch(err => {
-      console.error(`Failed to create Map from service ${serviceUrl}`, err)
-    });;
+      console.error(`Failed to create Map from service ${serviceUrl}`, err);
+    });
   });
 }
