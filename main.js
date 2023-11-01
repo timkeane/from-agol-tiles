@@ -36,14 +36,16 @@ mvtLayer(serviceUrl).then(layer => {
     })
   });
 
-  const resolutions = layer.getSource().getTileGrid().getResolutions();
+  const source = layer.getSource();
+  const resolutions = source.getTileGrid().getResolutions();
+  const projection = source.getProjection();
 
   const map = new Map({
     target: 'map2',
     view: new View({
+      projection,
       maxResolution: resolutions[0],
       minResolution: resolutions[resolutions.length - 1],
-      projection: 'EPSG:2263',
       center: [994955, 149780],
       zoom: 20
     }),
