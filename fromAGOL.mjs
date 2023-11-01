@@ -1,7 +1,10 @@
+import Map from 'ol/Map';
+import View from 'ol/View';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import Source from 'ol/source/VectorTile';
 import Layer from 'ol/layer/VectorTile';
 import MVT from 'ol/format/MVT';
+import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 
 export function tileGridInfo(serviceUrl) {
@@ -55,3 +58,29 @@ export function mvtLayer(serviceUrl) {
   });
 }
 
+export function mvtBasemap(serviceUrl) {
+  return new Promise((resolve, reject) => {
+    mvtLayer(serviceUrl).then(layer => {
+      const source = layer.getSource();
+      const tileGrid = source.getTileGrid();
+      const projection = source.getProjection();
+      const resolutions = tileGrid.getResolutions();
+      const extent = tileGrid.getExtent();
+      // TODO get center and zoom from style
+      const map = new Map({
+        target: 'map',
+        view: new View({
+          projection,
+          maxResolution: resolutions[0],
+          minResolution: resolutions[resolutions.length - 1],
+          center: getCenter(extent),
+          zoom: 9
+        }),
+        layers: [layer]
+      });
+      resolve(map);    
+    }).catch(err => {
+      console.error(`Failed to create Map from service ${serviceUrl}`, err)
+    });;
+  });
+}
