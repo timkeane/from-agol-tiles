@@ -66,6 +66,7 @@ export function mvtBasemap(serviceUrl) {
       const projection = source.getProjection();
       const resolutions = tileGrid.getResolutions();
       const extent = tileGrid.getExtent();
+      // TODO get center and zoom from style
       const map = new Map({
         target: 'map',
         view: new View({
