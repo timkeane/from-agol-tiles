@@ -28,7 +28,7 @@ export function tileGridInfo(serviceUrl) {
   });
 }
 
-export function  mvtLayer(serviceUrl) {
+export function mvtLayer(serviceUrl) {
   return new Promise((resolve, reject) => {
     tileGridInfo(serviceUrl).then(gridInfo => {
       const tileGrid = gridInfo.tileGrid;
