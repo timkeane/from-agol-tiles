@@ -6,38 +6,57 @@ import Layer from 'ol/layer/VectorTile';
 import MVT from 'ol/format/MVT';
 import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
+import proj4 from 'proj4';
 
-// TODO cleanup serviceUrl trailing slash
-export function tileGridInfo(serviceUrl) {
+function removeDoubleSlash(url) {
+  return url.replaceAll(/(?<!:)\/+/gm, '/');
+}
+
+export function getServiceDefinition(serviceUrl) {
   return new Promise((resolve, reject) => {
     fetch(serviceUrl).then(response => {
-      response.json().then(serviceDef => {
-        const esriExtent = serviceDef.fullExtent;
-        const extent = [esriExtent.xmin, esriExtent.ymin, esriExtent.xmax, esriExtent.ymax];
-        const tileInfo = serviceDef.tileInfo;
-        const projection = `EPSG:${tileInfo.spatialReference.latestWkid}`;
-        const origin = [tileInfo.origin.x, tileInfo.origin.y];
-        const lods = tileInfo.lods;
-        const tileSize = [tileInfo.cols, tileInfo.rows];
-        const resolutions = [];
-        lods.forEach(lod => {
-          resolutions.push(lod.resolution);
-        });
-        const tileGrid = new TileGrid({origin, extent, tileSize, resolutions});
-        resolve({tileGrid, projection});
+      response.json().then(serviceDefinition => {
+        resolve(serviceDefinition);
       });
     }).catch(err => {
-      console.error(`Failed to create TileGid from service ${serviceUrl}`, err);
+      console.error(`Failed to create get service definition from service ${serviceUrl}`, err);
     });
   });
 }
 
+function getTileUrls(serviceUrl, serviceDefinition) {
+  const tileUrls = [];
+  serviceDefinition.tiles.forEach(url => {
+    if (url.indexOf('http') === -1) {
+      tileUrls.push(removeDoubleSlash(`${serviceUrl}/${url}`));
+    } else {
+      tileUrls.push(removeDoubleSlash(url));
+    }
+  });
+  return tileUrls;
+}
+
+function getGetTileGrid(serviceDefinition) {
+  const esriExtent = serviceDefinition.fullExtent;
+  const extent = [esriExtent.xmin, esriExtent.ymin, esriExtent.xmax, esriExtent.ymax];
+  const tileInfo = serviceDefinition.tileInfo;
+  const origin = [tileInfo.origin.x, tileInfo.origin.y];
+  const lods = tileInfo.lods;
+  const tileSize = [tileInfo.cols, tileInfo.rows];
+  const resolutions = [];
+  lods.forEach(lod => {
+    resolutions.push(lod.resolution);
+  });
+  return new TileGrid({origin, extent, tileSize, resolutions});
+}
+
 export function mvtLayer(serviceUrl) {
   return new Promise((resolve, reject) => {
-    tileGridInfo(serviceUrl).then(gridInfo => {
-      const tileGrid = gridInfo.tileGrid;
-      const styleUrl =`${serviceUrl}/resources/styles/root.json`;
-      const options =  {
+    getServiceDefinition(serviceUrl).then(serviceDefinition => {
+      const tileInfo = serviceDefinition.tileInfo;
+      const tileGrid = getGetTileGrid(serviceDefinition);
+      const styleUrl = removeDoubleSlash(`${serviceUrl}/resources/styles/root.json`);
+      const options = {
         resolutions: tileGrid.getResolutions(),
         updateSource: false
       };
@@ -45,14 +64,19 @@ export function mvtLayer(serviceUrl) {
         declutter: true,
         source: new Source({
           format: new MVT(),
-          projection: gridInfo.projection,
-          tileGrid: tileGrid,
-          url: `${serviceUrl}/tile/{z}/{y}/{x}.pbf`
+          projection: `EPSG:${tileInfo.spatialReference.latestWkid}`,
+          tileGrid,
+          urls: getTileUrls(serviceUrl, serviceDefinition)
         })
       });
-      applyStyle(layer, styleUrl, '', options);
-      applyBackground(layer, styleUrl);
-      resolve(layer);
+      fetch(styleUrl).then(response => {
+        response.json().then(style => {
+          // TODO make relative URLs absolute to allow use of style object
+          applyStyle(layer, styleUrl, '', options);
+          applyBackground(layer, style);
+          resolve({layer, style});
+        });
+      });
     }).catch(err => {
       console.error(`Failed to create Layer from service ${serviceUrl}`, err);
     });
@@ -61,21 +85,29 @@ export function mvtLayer(serviceUrl) {
 
 export function mvtBasemap(serviceUrl) {
   return new Promise((resolve, reject) => {
-    mvtLayer(serviceUrl).then(layer => {
+    mvtLayer(serviceUrl).then(styledLayer => {
+      const layer = styledLayer.layer;
+      const style = styledLayer.style;
       const source = layer.getSource();
       const tileGrid = source.getTileGrid();
       const projection = source.getProjection();
       const resolutions = tileGrid.getResolutions();
       const extent = tileGrid.getExtent();
-      // TODO get center and zoom from style
+      const zoom = style.zoom !== undefined ? style.zoom : 9;
+      let center = style.center;
+      if (center) {
+        center = proj4('EPSG:4326', projection.getCode(), center);
+      } else {
+        center = getCenter(extent);
+      }
       const map = new Map({
         target: 'map',
         view: new View({
+          center,
+          zoom,
           projection,
           maxResolution: resolutions[0],
-          minResolution: resolutions[resolutions.length - 1],
-          center: getCenter(extent),
-          zoom: 9
+          minResolution: resolutions[resolutions.length - 1]
         }),
         layers: [layer]
       });
