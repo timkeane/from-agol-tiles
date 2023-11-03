@@ -17,13 +17,8 @@ const vectorTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/ar
 const imageTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/NYC_Orthos_-_2020/MapServer/?f=pjson';
 
 createBasemap(vectorTileServiceUrl).then(map => {
-  const layers = map.getLayers().getArray();
-  window.view = map.getView();
-  window.vectorLayer = layers[layers.length - 1];
-
   createLayer(imageTileServiceUrl).then(photoLayer => {
-    
-    window.photoLayer = photoLayer;
+
     photoLayer.setVisible(false);
     map.addLayer(photoLayer);
 
@@ -62,5 +57,4 @@ createBasemap(vectorTileServiceUrl).then(map => {
     });
 
   });
-
 });
