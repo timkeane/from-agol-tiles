@@ -3,7 +3,7 @@ import Layer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
-import {mvtBasemap} from './fromAgolTiles';
+import {createBasemap} from './fromAgolTiles';
 import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 
@@ -15,7 +15,7 @@ register(proj4);
 
 const serviceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer/';
 
-mvtBasemap(serviceUrl).then(map => {
+createBasemap(serviceUrl).then(map => {
   const source = new Source({
     format: new GeoJSON({
       dataProjection: 'EPSG:2263',
