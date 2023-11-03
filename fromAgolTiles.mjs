@@ -10,14 +10,12 @@ import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import proj4 from 'proj4';
 
-function removeDoubleSlash(url) {
-  return url.replaceAll(/(?<!:)\/+/gm, '/');
-}
-
 function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
-  const url = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
+  const url = `${baseUrl.substring(0, baseUrl.lastIndexOf('/'))}/`;
   if (relativePath.indexOf('http') === -1) {
-    return removeDoubleSlash(`${url}//${relativePath}`);
+    const finalUrl = `${url}${relativePath}`;
+    console.warn({baseUrl, url, finalUrl});
+    return finalUrl;
   }
   return relativePath;
 }
@@ -74,14 +72,14 @@ function createImageLayer(serviceUrl, serviceDefinition) {
       })
     });
     resolve(layer);
-  }).catch(err => console.error(`Failed to create TileLayer from service ${serviceUrl}`, err));
+  }).catch(err => console.error(`Failed to create ImageTileLayer from service ${serviceUrl}`, err));
 }
 
 function createVectorLayer(serviceUrl, serviceDefinition) {
   return new Promise((resolve, reject) => {
     const tileInfo = serviceDefinition.tileInfo;
     const tileGrid = getGetTileGrid(serviceDefinition);
-    const styleUrl = removeDoubleSlash(`${serviceUrl}/resources/styles/root.json`);
+    const styleUrl = makeAbsoluteUrlFromRelative(serviceUrl, 'resources/styles/root.json');
     const options = {
       resolutions: tileGrid.getResolutions(),
       updateSource: false
