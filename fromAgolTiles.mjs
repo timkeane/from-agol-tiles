@@ -14,7 +14,6 @@ function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
   const url = `${baseUrl.substring(0, baseUrl.lastIndexOf('/'))}/`;
   if (relativePath.indexOf('http') === -1) {
     const finalUrl = `${url}${relativePath}`;
-    console.warn({baseUrl, url, finalUrl});
     return finalUrl;
   }
   return relativePath;
