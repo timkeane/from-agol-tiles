@@ -3,7 +3,7 @@ import Layer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
-import {mvtBasemap} from './FromAGOL';
+import {mvtBasemap} from './fromAgolTiles';
 import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 
