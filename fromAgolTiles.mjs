@@ -11,8 +11,12 @@ import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import proj4 from 'proj4';
 
 function getJsonServiceUrl(serviceUrl) {
-  if (serviceUrl.indexOf('?f=pjson') === -1) {
+  const url = new URL(serviceUrl);
+  const search = url.search;
+  if (!search) {
     return `${serviceUrl}?f=pjson`
+  } else if (search.indexOf('f=pjson') === -1) {
+    return `${serviceUrl}&f=pjson`
   }
   return serviceUrl;
 }
