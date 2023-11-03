@@ -14,7 +14,15 @@ function removeDoubleSlash(url) {
   return url.replaceAll(/(?<!:)\/+/gm, '/');
 }
 
-export function getServiceDefinition(serviceUrl) {
+function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
+  const url = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
+  if (relativePath.indexOf('http') === -1) {
+    return removeDoubleSlash(`${url}//${relativePath}`);
+  }
+  return relativePath;
+}
+
+function getServiceDefinition(serviceUrl) {
   return new Promise((resolve, reject) => {
     fetch(serviceUrl).then(response => {
       response.json().then(serviceDefinition => {
@@ -29,11 +37,7 @@ export function getServiceDefinition(serviceUrl) {
 function getTileUrls(serviceUrl, serviceDefinition) {
   const tileUrls = [];
   serviceDefinition.tiles.forEach(url => {
-    if (url.indexOf('http') === -1) {
-      tileUrls.push(removeDoubleSlash(`${serviceUrl}/${url}`));
-    } else {
-      tileUrls.push(removeDoubleSlash(url));
-    }
+    tileUrls.push(makeAbsoluteUrlFromRelative(serviceUrl, url));
   });
   return tileUrls;
 }
@@ -66,18 +70,6 @@ function createImageLayer(serviceUrl, serviceDefinition) {
   }).catch(err => console.error(`Failed to create TileLayer from service ${serviceUrl}`, err));
 }
 
-function makeAbsoluteUrls(styleUrl, mbStyle) {
-  const url = styleUrl.substring(0, styleUrl.lastIndexOf('/'));
-  const glyphs = mbStyle.glyphs;
-  const sprites = mbStyle.sprite;
-  if (glyphs.indexOf('http') === -1) {
-    mbStyle.glyphs = removeDoubleSlash(`${url}/${glyphs}`);
-  }
-  if (sprites.indexOf('http') === -1) {
-    mbStyle.sprite = removeDoubleSlash(`${url}/${sprites}`);    
-  }
-}
-
 function createVectorLayer(serviceUrl, serviceDefinition) {
   return new Promise((resolve, reject) => {
     const tileInfo = serviceDefinition.tileInfo;
@@ -98,7 +90,8 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
     });
     fetch(styleUrl).then(response => {
       response.json().then(mbStyle => {
-        makeAbsoluteUrls(styleUrl, mbStyle);
+        mbStyle.glyphs = makeAbsoluteUrlFromRelative(styleUrl, mbStyle.glyphs);
+        mbStyle.sprite = makeAbsoluteUrlFromRelative(styleUrl, mbStyle.sprite);
         applyStyle(layer, mbStyle, '', options);
         applyBackground(layer, mbStyle);
         layer._mbStyle = mbStyle;
