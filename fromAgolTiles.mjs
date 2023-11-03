@@ -14,9 +14,9 @@ function getJsonServiceUrl(serviceUrl) {
   const url = new URL(serviceUrl);
   const search = url.search;
   if (!search) {
-    return `${serviceUrl}?f=pjson`
+    return `${serviceUrl}?f=pjson`;
   } else if (search.indexOf('f=pjson') === -1) {
-    return `${serviceUrl}&f=pjson`
+    return `${serviceUrl}&f=pjson`;
   }
   return serviceUrl;
 }
