@@ -3,7 +3,7 @@ import Layer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
-import {createBasemap} from './fromAgolTiles';
+import {createBasemap, createLayer} from './fromAgolTiles';
 import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 
@@ -13,24 +13,54 @@ proj4.defs([
 ]);
 register(proj4);
 
-const serviceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer/';
+const vectorTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer/';
+const imageTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/NYC_Orthos_-_2020/MapServer/?f=pjson';
 
-createBasemap(serviceUrl).then(map => {
-  const source = new Source({
-    format: new GeoJSON({
-      dataProjection: 'EPSG:2263',
-      featureProjection: 'EPSG:2263'
-    }),
-    url: './building.json'
+createBasemap(vectorTileServiceUrl).then(map => {
+  const layers = map.getLayers().getArray();
+  window.view = map.getView();
+  window.vectorLayer = layers[layers.length - 1];
+
+  createLayer(imageTileServiceUrl).then(photoLayer => {
+    
+    window.photoLayer = photoLayer;
+    photoLayer.setVisible(false);
+    map.addLayer(photoLayer);
+
+    const source = new Source({
+      format: new GeoJSON({
+        dataProjection: 'EPSG:2263',
+        featureProjection: 'EPSG:2263'
+      }),
+      url: './building.json'
+    });
+    const blackStyle = new Style({
+      stroke: new Stroke({
+        width: 2,
+        lineDash: [5, 5],
+        color: 'black'
+      })
+    });
+    const whiteStyle = new Style({
+      stroke: new Stroke({
+        width: 3,
+        lineDash: [5, 5],
+        color: 'white'
+      })
+    });
+
+    const buildingLayer = new Layer({source, style: blackStyle});
+
+    map.addLayer(buildingLayer);
+    map.getView().setCenter([994955, 149780]);
+    map.getView().setZoom(18);
+  
+    document.getElementById('toggle').addEventListener('click', () => {
+      const visible = !photoLayer.getVisible();
+      photoLayer.setVisible(visible);
+      buildingLayer.setStyle(visible ? whiteStyle : blackStyle);
+    });
+
   });
-  const style = new Style({
-    stroke: new Stroke({
-      width: 1,
-      lineDash: [5, 5],
-      color: 'black'
-    })
-  });
-  map.addLayer(new Layer({source, style}));
-  map.getView().setCenter([994955, 149780]);
-  map.getView().setZoom(19);
+
 });

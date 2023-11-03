@@ -2,7 +2,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import VectorTileSource from 'ol/source/VectorTile';
-import ImageTileSource from 'ol/source/Tile';
+import XYZSource from 'ol/source/XYZ';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import ImageTileLayer from 'ol/layer/Tile';
 import MVT from 'ol/format/MVT';
@@ -36,10 +36,16 @@ function getServiceDefinition(serviceUrl) {
 
 function getTileUrls(serviceUrl, serviceDefinition) {
   const tileUrls = [];
-  serviceDefinition.tiles.forEach(url => {
-    tileUrls.push(makeAbsoluteUrlFromRelative(serviceUrl, url));
-  });
-  return tileUrls;
+  const tiles = serviceDefinition.tiles;
+  if (tiles) {
+    tiles.forEach(url => {
+      tileUrls.push(makeAbsoluteUrlFromRelative(serviceUrl, url));
+    });
+    return tileUrls;  
+  }
+  let format = serviceDefinition.tileInfo.format;
+  format = format === 'MIXED' ? '' : `.${format}`;
+  return [makeAbsoluteUrlFromRelative(serviceUrl, `tile/{z}/{y}/{x}${format}`)];
 }
 
 function getGetTileGrid(serviceDefinition) {
@@ -58,9 +64,10 @@ function getGetTileGrid(serviceDefinition) {
 
 function createImageLayer(serviceUrl, serviceDefinition) {
   return new Promise((resolve, reject) => {
+    const tileInfo = serviceDefinition.tileInfo;
     const layer = new ImageTileLayer({
       declutter: true,
-      source: new VectorTileSource({
+      source: new XYZSource({
         projection: `EPSG:${tileInfo.spatialReference.latestWkid}`,
         tileGrid: getGetTileGrid(serviceDefinition),
         urls: getTileUrls(serviceUrl, serviceDefinition)
