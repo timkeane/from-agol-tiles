@@ -11,10 +11,15 @@ import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import proj4 from 'proj4';
 
 function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
-  const url = `${baseUrl.substring(0, baseUrl.lastIndexOf('/'))}/`;
   if (relativePath.indexOf('http') === -1) {
-    const finalUrl = `${url}${relativePath}`;
-    return finalUrl;
+    let url = `${baseUrl.split('?')[0]}`;
+    if (url === baseUrl) {
+      url = `${url.substring(0, url.lastIndexOf('/'))}`;
+    }
+    if (url.lastIndexOf('/') !== url.length - 1) {
+      url = `${url}/`;
+    } 
+    return `${url}${relativePath}`;
   }
   return relativePath;
 }
