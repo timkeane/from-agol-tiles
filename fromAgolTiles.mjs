@@ -10,6 +10,13 @@ import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import proj4 from 'proj4';
 
+function getJsonServiceUrl(serviceUrl) {
+  if (serviceUrl.indexOf('?f=pjson') === -1) {
+    return `${serviceUrl}?f=pjson`
+  }
+  return serviceUrl;
+}
+
 function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
   if (relativePath.indexOf('http') === -1) {
     let url = `${baseUrl.split('?')[0]}`;
@@ -111,6 +118,7 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
 }
 
 export function createLayer(serviceUrl) {
+  serviceUrl = getJsonServiceUrl(serviceUrl);
   return new Promise((resolve, reject) => {
     getServiceDefinition(serviceUrl).then(serviceDefinition => {
       if (serviceDefinition.tileInfo.format === 'pbf') {
@@ -123,6 +131,7 @@ export function createLayer(serviceUrl) {
 }
 
 export function createBasemap(serviceUrl) {
+  serviceUrl = getJsonServiceUrl(serviceUrl);
   return new Promise((resolve, reject) => {
     createLayer(serviceUrl).then(layer => {
       const mbStyle = layer._mbStyle;
