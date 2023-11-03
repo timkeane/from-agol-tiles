@@ -13,7 +13,7 @@ proj4.defs([
 register(proj4);
 
 const vectorTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer/';
-const imageTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/NYC_Orthos_-_2020/MapServer/?x=y&f=pjson';
+const imageTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/NYC_Orthos_-_2020/MapServer/';
 
 createBasemap(vectorTileServiceUrl).then(map => {
   createLayer(imageTileServiceUrl).then(photoLayer => {
