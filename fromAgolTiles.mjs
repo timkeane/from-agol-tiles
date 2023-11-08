@@ -117,8 +117,11 @@ export function createLayer(serviceUrl) {
   });
 }
 
-export function createBasemap(serviceUrl) {
+export function createBasemap(target, serviceUrl) {
   return new Promise((resolve, reject) => {
+    if (typeof target === 'string') {
+      target = document.getElementById(target);
+    }
     createLayer(serviceUrl).then(layer => {
       const mbStyle = layer._mbStyle;
       const source = layer.getSource();
@@ -134,7 +137,7 @@ export function createBasemap(serviceUrl) {
         center = getCenter(extent);
       }
       const map = new Map({
-        target: 'map',
+        target,
         view: new View({
           center,
           zoom,
