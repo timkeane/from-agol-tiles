@@ -60,19 +60,19 @@ test('createLayer - vector', () => {
     expect(layer instanceof VectorTileLayer).toBe(true);
 
     expect(source instanceof VectorTileSource).toBe(true);
-    expect(source.getUrls()).toEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}.pbf']);
+    expect(source.getUrls()).toStrictEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}.pbf']);
     
     expect(source.getProjection().getCode()).toBe('EPSG:2263');
 
-    expect(grid.getResolutions()).toEqual(expectedVectorTileInfo.expectedResolutions);
-    expect(grid.getExtent()).toEqual(expectedVectorTileInfo.expectedExtent);
-    expect(grid.getOrigin()).toEqual(expectedVectorTileInfo.expectedOrigin);
+    expect(grid.getResolutions()).toStrictEqual(expectedVectorTileInfo.expectedResolutions);
+    expect(grid.getExtent()).toStrictEqual(expectedVectorTileInfo.expectedExtent);
+    expect(grid.getOrigin()).toStrictEqual(expectedVectorTileInfo.expectedOrigin);
 
     expect(applyStyle.mock.calls.length).toBe(1);
     expect(applyStyle.mock.calls[0][0]).toBe(layer);
     expect(applyStyle.mock.calls[0][1]).toBe(mbStyle);
     expect(applyStyle.mock.calls[0][2]).toBe('');
-    expect(applyStyle.mock.calls[0][3]).toEqual({
+    expect(applyStyle.mock.calls[0][3]).toStrictEqual({
       resolutions: expectedVectorTileInfo.expectedResolutions,
       updateSource: false
     });
@@ -94,13 +94,13 @@ test('createLayer - image', () => {
 
     expect(layer instanceof ImageTileLayer).toBe(true);
     expect(source instanceof ImageTileSource).toBe(true);
-    expect(source.getUrls()).toEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}']);
+    expect(source.getUrls()).toStrictEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}']);
     
     expect(source.getProjection().getCode()).toBe('EPSG:3857');
 
-    expect(grid.getResolutions()).toEqual(expectedImageTileInfo.expectedResolutions);
-    expect(grid.getExtent()).toEqual(expectedImageTileInfo.expectedExtent);
-    expect(grid.getOrigin()).toEqual(expectedImageTileInfo.expectedOrigin);
+    expect(grid.getResolutions()).toStrictEqual(expectedImageTileInfo.expectedResolutions);
+    expect(grid.getExtent()).toStrictEqual(expectedImageTileInfo.expectedExtent);
+    expect(grid.getOrigin()).toStrictEqual(expectedImageTileInfo.expectedOrigin);
 
     expect(applyStyle.mock.calls.length).toBe(0);
     expect(applyBackground.mock.calls.length).toBe(0);
@@ -119,7 +119,7 @@ test('createBasemap - vector', () => {
     expect(map.getTargetElement()).toBe(document.getElementById('map'));
     expect(map.getLayers().getArray().length).toBe(1);
     expect(view.getProjection().getCode()).toBe('EPSG:2263');
-    expect(view.getCenter()).toEqual(getCenter(expectedVectorTileInfo.expectedExtent));
+    expect(view.getCenter()).toStrictEqual(getCenter(expectedVectorTileInfo.expectedExtent));
     expect(view.getZoom()).toBe(9);
 
     expect(fetch.mock.calls.length).toBe(2);
@@ -129,19 +129,19 @@ test('createBasemap - vector', () => {
     expect(layer instanceof VectorTileLayer).toBe(true);
 
     expect(source instanceof VectorTileSource).toBe(true);
-    expect(source.getUrls()).toEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}.pbf']);
+    expect(source.getUrls()).toStrictEqual(['http://mock-host/mock-path/tile/{z}/{y}/{x}.pbf']);
     
     expect(source.getProjection().getCode()).toBe('EPSG:2263');
 
-    expect(grid.getResolutions()).toEqual(expectedVectorTileInfo.expectedResolutions);
-    expect(grid.getExtent()).toEqual(expectedVectorTileInfo.expectedExtent);
-    expect(grid.getOrigin()).toEqual(expectedVectorTileInfo.expectedOrigin);
+    expect(grid.getResolutions()).toStrictEqual(expectedVectorTileInfo.expectedResolutions);
+    expect(grid.getExtent()).toStrictEqual(expectedVectorTileInfo.expectedExtent);
+    expect(grid.getOrigin()).toStrictEqual(expectedVectorTileInfo.expectedOrigin);
 
     expect(applyStyle.mock.calls.length).toBe(1);
     expect(applyStyle.mock.calls[0][0]).toBe(layer);
     expect(applyStyle.mock.calls[0][1]).toBe(mbStyle);
     expect(applyStyle.mock.calls[0][2]).toBe('');
-    expect(applyStyle.mock.calls[0][3]).toEqual({
+    expect(applyStyle.mock.calls[0][3]).toStrictEqual({
       resolutions: expectedVectorTileInfo.expectedResolutions,
       updateSource: false
     });
