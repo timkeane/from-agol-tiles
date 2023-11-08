@@ -25,8 +25,10 @@ function getServiceDefinition(serviceUrl) {
       response.json().then(serviceDefinition => {
         resolve(serviceDefinition);
       });
-    }).catch(err => {
-      console.error(`Failed to create get service definition from service ${serviceUrl}`, err);
+    }).catch(error => {
+      const message = `Failed to create get service definition from service ${serviceUrl}`;
+      console.error(message, error);
+      reject({message, error});
     });
   });
 }
@@ -71,7 +73,11 @@ function createImageLayer(serviceUrl, serviceDefinition) {
       })
     });
     resolve(layer);
-  }).catch(err => console.error(`Failed to create ImageTileLayer from service ${serviceUrl}`, err));
+  }).catch(error => {
+    const message = `Failed to create ImageTileLayer from service ${serviceUrl}`;
+    console.error(message, error);
+    reject({message, error});
+  });
 }
 
 function createVectorLayer(serviceUrl, serviceDefinition) {
@@ -102,7 +108,11 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
         resolve(layer);
       });
     });
-  }).catch(err => console.error(`Failed to create VectorTileLayer from service ${serviceUrl}`, err));
+  }).catch(error => {
+    const message = `Failed to create VectorTileLayer from service ${serviceUrl}`;
+    console.error(message, error);
+    reject({message, error});
+  });
 }
 
 export function createLayer(serviceUrl) {
@@ -149,5 +159,9 @@ export function createBasemap(target, serviceUrl) {
       });
       resolve(map);
     });
-  }).catch(err => console.error(`Failed to create Map from service ${serviceUrl}`, err));
+  }).catch(error => {
+    const message = `Failed to create Map from service ${serviceUrl}`;
+    console.error(message, error);
+    reject({message, error});
+  });
 }
