@@ -54,7 +54,7 @@ test('createLayer - vector', () => {
     const grid = source.getTileGrid();
 
     expect(fetch.mock.calls.length).toBe(2);
-    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/');
+    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/?f=pjson');
     expect(fetch.mock.calls[1][0]).toBe('http://mock-host/mock-path/resources/styles/root.json');
 
     expect(layer instanceof VectorTileLayer).toBe(true);
@@ -90,7 +90,7 @@ test('createLayer - image', () => {
     const grid = source.getTileGrid();
 
     expect(fetch.mock.calls.length).toBe(1);
-    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/');
+    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/?f=pjson');
 
     expect(layer instanceof ImageTileLayer).toBe(true);
     expect(source instanceof ImageTileSource).toBe(true);
@@ -123,7 +123,7 @@ test('createBasemap - vector', () => {
     expect(view.getZoom()).toBe(9);
 
     expect(fetch.mock.calls.length).toBe(2);
-    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/');
+    expect(fetch.mock.calls[0][0]).toBe('http://mock-host/mock-path/?f=pjson');
     expect(fetch.mock.calls[1][0]).toBe('http://mock-host/mock-path/resources/styles/root.json');
 
     expect(layer instanceof VectorTileLayer).toBe(true);

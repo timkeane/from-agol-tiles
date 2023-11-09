@@ -10,11 +10,27 @@ import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
 import proj4 from 'proj4';
 
+function getJsonServiceUrl(serviceUrl) {
+  const url = new URL(serviceUrl);
+  const search = url.search;
+  if (!search) {
+    return `${serviceUrl}?f=pjson`;
+  } else if (search.indexOf('f=pjson') === -1) {
+    return `${serviceUrl}&f=pjson`;
+  }
+  return serviceUrl;
+}
+
 function makeAbsoluteUrlFromRelative(baseUrl, relativePath) {
-  const url = `${baseUrl.substring(0, baseUrl.lastIndexOf('/'))}/`;
   if (relativePath.indexOf('http') === -1) {
-    const finalUrl = `${url}${relativePath}`;
-    return finalUrl;
+    let url = `${baseUrl.split('?')[0]}`;
+    if (url === baseUrl) {
+      url = `${url.substring(0, url.lastIndexOf('/'))}`;
+    }
+    if (url.lastIndexOf('/') !== url.length - 1) {
+      url = `${url}/`;
+    } 
+    return `${url}${relativePath}`;
   }
   return relativePath;
 }
@@ -116,6 +132,7 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
 }
 
 export function createLayer(serviceUrl) {
+  serviceUrl = getJsonServiceUrl(serviceUrl);
   return new Promise((resolve, reject) => {
     getServiceDefinition(serviceUrl).then(serviceDefinition => {
       if (serviceDefinition.tileInfo.format === 'pbf') {
@@ -128,6 +145,7 @@ export function createLayer(serviceUrl) {
 }
 
 export function createBasemap(target, serviceUrl) {
+  serviceUrl = getJsonServiceUrl(serviceUrl);
   return new Promise((resolve, reject) => {
     if (typeof target === 'string') {
       target = document.getElementById(target);
