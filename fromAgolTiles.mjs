@@ -8,7 +8,8 @@ import ImageTileLayer from 'ol/layer/Tile';
 import MVT from 'ol/format/MVT';
 import {getCenter} from 'ol/extent';
 import {applyStyle, applyBackground} from 'ol-mapbox-style';
-import proj4 from 'proj4';
+import {register} from 'ol/proj/proj4';
+import Point from 'ol/geom/Point';
 
 function getJsonServiceUrl(serviceUrl) {
   const url = new URL(serviceUrl);
@@ -144,12 +145,13 @@ export function createLayer(serviceUrl) {
   });
 }
 
-export function createBasemap(target, serviceUrl) {
-  serviceUrl = getJsonServiceUrl(serviceUrl);
+export function createBasemap(options) {
+  const serviceUrl = getJsonServiceUrl(options.serviceUrl);
+  const controls = options.controls;
+  const proj4 = options.proj4;
+  let target = typeof options.target === 'string' ? document.getElementById(options.target) : options.target;
+  register(proj4);
   return new Promise((resolve, reject) => {
-    if (typeof target === 'string') {
-      target = document.getElementById(target);
-    }
     createLayer(serviceUrl).then(layer => {
       const mbStyle = layer._mbStyle;
       const source = layer.getSource();
@@ -157,15 +159,20 @@ export function createBasemap(target, serviceUrl) {
       const projection = source.getProjection();
       const resolutions = tileGrid.getResolutions();
       const extent = tileGrid.getExtent();
-      const zoom = mbStyle?.zoom !== undefined ? mbStyle.zoom : 9;
-      let center = mbStyle?.center;
+      let zoom = mbStyle.zoom;
+      let center = mbStyle.center;
+      if (!zoom) {
+        zoom = 9;
+      }
       if (center) {
-        center = proj4('EPSG:4326', projection.getCode(), center);
+        const point = new Point(center);
+        center = point.transform('EPSG:4326', projection).getCoordinates();
       } else {
         center = getCenter(extent);
       }
       const map = new Map({
         target,
+        controls,
         view: new View({
           center,
           zoom,
