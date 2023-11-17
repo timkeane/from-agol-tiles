@@ -119,6 +119,8 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
       response.json().then(mbStyle => {
         mbStyle.glyphs = makeAbsoluteUrlFromRelative(styleUrl, mbStyle.glyphs);
         mbStyle.sprite = makeAbsoluteUrlFromRelative(styleUrl, mbStyle.sprite);
+        mbStyle.metadata = mbStyle.metadata || {};
+        mbStyle.metadata['ol:webfonts'] = mbStyle.metadata['ol:webfonts'] || makeAbsoluteUrlFromRelative(serviceUrl, 'resources/fonts/{font-family}/{fontweight}{-fontstyle}.css');
         applyStyle(layer, mbStyle, '', options);
         applyBackground(layer, mbStyle);
         layer._mbStyle = mbStyle;
@@ -128,12 +130,12 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
   }).catch(error => {
     const message = `Failed to create VectorTileLayer from service ${serviceUrl}`;
     console.error(message, error);
-    reject({message, error});
   });
 }
 
-export function createLayer(serviceUrl) {
-  serviceUrl = getJsonServiceUrl(serviceUrl);
+export function createLayer(options) {
+  const serviceUrl = getJsonServiceUrl(options.serviceUrl);
+  register(options.proj4);
   return new Promise((resolve, reject) => {
     getServiceDefinition(serviceUrl).then(serviceDefinition => {
       if (serviceDefinition.tileInfo.format === 'pbf') {
@@ -148,11 +150,9 @@ export function createLayer(serviceUrl) {
 export function createBasemap(options) {
   const serviceUrl = getJsonServiceUrl(options.serviceUrl);
   const controls = options.controls;
-  const proj4 = options.proj4;
   let target = typeof options.target === 'string' ? document.getElementById(options.target) : options.target;
-  register(proj4);
   return new Promise((resolve, reject) => {
-    createLayer(serviceUrl).then(layer => {
+    createLayer(options).then(layer => {
       const mbStyle = layer._mbStyle;
       const source = layer.getSource();
       const tileGrid = source.getTileGrid();
@@ -187,6 +187,5 @@ export function createBasemap(options) {
   }).catch(error => {
     const message = `Failed to create Map from service ${serviceUrl}`;
     console.error(message, error);
-    reject({message, error});
   });
 }

@@ -7,7 +7,6 @@ import ImageTileSource from 'ol/source/XYZ';
 import ImageTileLayer from 'ol/layer/Tile';
 import {getCenter} from 'ol/extent';
 import proj4 from 'proj4';
-import {register} from 'ol/proj/proj4';
 import expectedVectorTileInfo from './expectedVectorTileInfo';
 import expectedImageTileInfo from './expectedImageTileInfo';
 import mbStyle from './mbStyle';
@@ -15,7 +14,6 @@ import mbStyle from './mbStyle';
 proj4.defs([
   ['EPSG:2263', '+proj=lcc +lat_1=41.03333333333333 +lat_2=40.66666666666666 +lat_0=40.16666666666666 +lon_0=-74 +x_0=300000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=ft +to_meter=0.3048006096012192 +no_defs']
 ]);
-register(proj4);
 
 vi.mock('ol-mapbox-style', () => {
   return {
@@ -49,7 +47,11 @@ beforeEach(async () => {
 
 test('createLayer - vector', () => {
   agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
-  createLayer('http://mock-host/mock-path/').then(layer => {
+  createLayer({
+    serviceUrl: 'http://mock-host/mock-path/',
+    proj4
+  }).then(layer => {
+    
     const source = layer.getSource();
     const grid = source.getTileGrid();
 
@@ -85,7 +87,10 @@ test('createLayer - vector', () => {
 
 test('createLayer - image', () => {
   agolServiceDefinition = expectedImageTileInfo.serviceDefinition;
-  createLayer('http://mock-host/mock-path/').then(layer => {
+  createLayer({
+    serviceUrl: 'http://mock-host/mock-path/',
+    proj4
+  }).then(layer => {
     const source = layer.getSource();
     const grid = source.getTileGrid();
 
@@ -109,8 +114,12 @@ test('createLayer - image', () => {
 
 test('createBasemap - vector', () => {
   agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
-  createBasemap('map', 'http://mock-host/mock-path/').then(map => {
-    
+  createBasemap({
+    target: 'map', 
+    serviceUrl: 'http://mock-host/mock-path/',
+    proj4
+  }).then(map => {
+
     const layer = map.getLayers().getArray()[0];
     const view = map.getView();
     const source = layer.getSource();
