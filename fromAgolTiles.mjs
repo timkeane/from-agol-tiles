@@ -78,7 +78,7 @@ function getGetTileGrid(serviceDefinition) {
   return new TileGrid({origin, extent, tileSize, resolutions});
 }
 
-function createImageLayer(serviceUrl, serviceDefinition) {
+function createImageLayer(serviceDefinition, serviceUrl) {
   return new Promise((resolve, reject) => {
     const tileInfo = serviceDefinition.tileInfo;
     const layer = new ImageTileLayer({
@@ -97,11 +97,10 @@ function createImageLayer(serviceUrl, serviceDefinition) {
   });
 }
 
-function createVectorLayer(serviceUrl, serviceDefinition) {
+function createVectorLayer(serviceDefinition, serviceUrl, styleUrl) {
   return new Promise((resolve, reject) => {
     const tileInfo = serviceDefinition.tileInfo;
     const tileGrid = getGetTileGrid(serviceDefinition);
-    const styleUrl = makeAbsoluteUrlFromRelative(serviceUrl, 'resources/styles/root.json');
     const options = {
       resolutions: tileGrid.getResolutions(),
       updateSource: false
@@ -115,6 +114,9 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
         urls: getTileUrls(serviceUrl, serviceDefinition)
       })
     });
+
+    styleUrl = styleUrl || makeAbsoluteUrlFromRelative(serviceUrl, 'resources/styles/root.json');
+  
     fetch(styleUrl).then(response => {
       response.json().then(mbStyle => {
         mbStyle.glyphs = makeAbsoluteUrlFromRelative(styleUrl, mbStyle.glyphs);
@@ -135,13 +137,14 @@ function createVectorLayer(serviceUrl, serviceDefinition) {
 
 export function createLayer(options) {
   const serviceUrl = getJsonServiceUrl(options.serviceUrl);
+  const styleUrl = options.styleUrl;
   register(options.proj4);
   return new Promise((resolve, reject) => {
     getServiceDefinition(serviceUrl).then(serviceDefinition => {
       if (serviceDefinition.tileInfo.format === 'pbf') {
-        resolve(createVectorLayer(serviceUrl, serviceDefinition));
+        resolve(createVectorLayer(serviceDefinition, serviceUrl, styleUrl));
       } else {
-        resolve(createImageLayer(serviceUrl, serviceDefinition));
+        resolve(createImageLayer(serviceDefinition, serviceUrl));
       }
     });
   });

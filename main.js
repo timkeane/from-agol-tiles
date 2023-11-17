@@ -12,14 +12,18 @@ proj4.defs([
 
 const vectorTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/Poletop_2263/VectorTileServer/';
 const imageTileServiceUrl = 'https://tiles.arcgis.com/tiles/yG5s3afENB5iO9fj/arcgis/rest/services/NYC_Orthos_-_2020/MapServer/';
-
+const mapboxStyleJsonUrl = 'https://nyc.maps.arcgis.com/sharing/rest/content/items/a6fab56e9dca46c8a653c3388936696e/resources/styles/root.json?f=pjson';
 createBasemap({
   target: 'map',
   serviceUrl: vectorTileServiceUrl,
+  styleUrl: mapboxStyleJsonUrl,
   controls: [],
   proj4
 }).then(map => {
-  createLayer(imageTileServiceUrl).then(photoLayer => {
+  createLayer({
+    serviceUrl: imageTileServiceUrl,
+    proj4
+  }).then(photoLayer => {
 
     photoLayer.setVisible(false);
     map.addLayer(photoLayer);
