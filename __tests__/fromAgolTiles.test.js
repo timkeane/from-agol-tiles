@@ -45,12 +45,16 @@ beforeEach(async () => {
   await clearMocks();
 })
 
-test('createLayer - vector', () => {
-  agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
-  createLayer({
-    serviceUrl: 'http://mock-host/mock-path/',
-    proj4
-  }).then(layer => {
+test('createLayer - vector', async () => {
+  expect.assertions(18);
+
+  try {
+
+    agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
+    const layer = await   createLayer({
+      serviceUrl: 'http://mock-host/mock-path/',
+      proj4
+    });
     
     const source = layer.getSource();
     const grid = source.getTileGrid();
@@ -82,15 +86,24 @@ test('createLayer - vector', () => {
     expect(applyBackground.mock.calls.length).toBe(1);
     expect(applyBackground.mock.calls[0][0]).toBe(layer);
     expect(applyBackground.mock.calls[0][1]).toBe(mbStyle);
-  });
+
+  } catch (error) {
+    console.error('Error in createLayer - vector test:', error);
+    expect(error).toBeNull(); // Add this line to explicitly fail the test
+  }
 });
 
-test('createLayer - image', () => {
-  agolServiceDefinition = expectedImageTileInfo.serviceDefinition;
-  createLayer({
-    serviceUrl: 'http://mock-host/mock-path/',
-    proj4
-  }).then(layer => {
+test('createLayer - image', async () => {
+  expect.assertions(11);
+  
+  try {
+
+    agolServiceDefinition = expectedImageTileInfo.serviceDefinition;
+    const layer = await createLayer({
+      serviceUrl: 'http://mock-host/mock-path/',
+      proj4
+    });
+
     const source = layer.getSource();
     const grid = source.getTileGrid();
 
@@ -109,16 +122,23 @@ test('createLayer - image', () => {
 
     expect(applyStyle.mock.calls.length).toBe(0);
     expect(applyBackground.mock.calls.length).toBe(0);
-  });
+
+  } catch (error) {
+    console.error('Error in createLayer - image test:', error);
+    expect(error).toBeNull(); // Add this line to explicitly fail the test
+  }
 });
 
-test('createBasemap - vector', () => {
-  agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
-  createBasemap({
-    target: 'map', 
-    serviceUrl: 'http://mock-host/mock-path/',
-    proj4
-  }).then(map => {
+test('createBasemap - vector', async () => {
+  expect.assertions(23);
+
+  try {
+    agolServiceDefinition = expectedVectorTileInfo.serviceDefinition;
+    const map = await createBasemap({
+      target: 'map', 
+      serviceUrl: 'http://mock-host/mock-path/',
+      proj4
+    });
 
     const layer = map.getLayers().getArray()[0];
     const view = map.getView();
@@ -158,5 +178,10 @@ test('createBasemap - vector', () => {
     expect(applyBackground.mock.calls.length).toBe(1);
     expect(applyBackground.mock.calls[0][0]).toBe(layer);
     expect(applyBackground.mock.calls[0][1]).toBe(mbStyle);
-  });
+
+  } catch (error) {
+    console.error('Error in createBasemap - vector test:', error);
+    expect(error).toBeNull(); // Add this line to explicitly fail the test
+  }
+
 });
